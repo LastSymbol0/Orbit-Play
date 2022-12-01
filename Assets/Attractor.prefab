@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 5152873795853410121}
   - component: {fileID: 5152873795853410122}
   - component: {fileID: 5152873795853410123}
+  - component: {fileID: 4979599396090096661}
   m_Layer: 0
   m_Name: Attractor
   m_TagString: Untagged
@@ -31,7 +32,7 @@ Transform:
   m_GameObject: {fileID: 5152873795853410124}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 10, y: 10, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -78,8 +79,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: f3550c77c132c7e42a8f20eb7d7a55d4, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: 21300000, guid: f5a3e910c21a8884b8204f2cbf656dac, type: 3}
+  m_Color: {r: 0, g: 1, b: 0.9604409, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -125,7 +126,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.25
 --- !u!114 &5152873795853410121
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -157,7 +158,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 4
+  m_Radius: 0.44
 --- !u!114 &5152873795853410123
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -170,4 +171,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1454c235a358807429e2a1bceb700f2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpeedScale: 30
+  SpeedScale: 50
+  Camera: {fileID: 0}
+--- !u!114 &4979599396090096661
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5152873795853410124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b3a0d1029a02e744914d056ffe58440, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
