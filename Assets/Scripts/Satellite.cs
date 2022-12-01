@@ -3,7 +3,7 @@ using UnityEngine;
 
 static class Constants
 {
-    public static readonly float G = 9.2f;
+    public static readonly float G = 9.81f;
 }
 
 
