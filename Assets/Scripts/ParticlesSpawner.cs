@@ -17,14 +17,29 @@ public class ParticlesSpawner : MonoBehaviour
 
     [FormerlySerializedAs("Mass")] public GameObject Particle;
     public List<GameObject> Players = new List<GameObject>();
-    [FormerlySerializedAs("CreatedMasses")] public List<GameObject> CreatedParticles = new List<GameObject>();
-    [FormerlySerializedAs("MaxMass")] public int MaxParticles = 50;
-    [FormerlySerializedAs("TIME_TO_CREATE_MASS")] public float TIME_TO_CREATE_PARTICLE = 0.5f;
+
+    [FormerlySerializedAs("CreatedMasses")] 
+    public List<GameObject> CreatedParticles = new List<GameObject>();
+
+    [FormerlySerializedAs("MaxMass")] 
+    public int MaxParticles = 50;
+
+    [FormerlySerializedAs("TIME_TO_CREATE_MASS")] 
+    public float TIME_TO_CREATE_PARTICLE = 0.5f;
+
     public Vector2 pos;
+
+    private GameObject ParentForParticles = null;
 
 
     void Start()
     {
+        ParentForParticles = GameObject.FindGameObjectWithTag("ParticlesParent");
+        if(ParentForParticles == null)
+        {
+            Debug.LogError("Particles parent is null. Can't find GameObject with tag - ParticlesParent");
+        }
+
         StartCoroutine(CreateMass());
     }
 
@@ -36,15 +51,16 @@ public class ParticlesSpawner : MonoBehaviour
         {
             Vector2 p = new Vector2(Random.Range(-pos.x, pos.x), Random.Range(-pos.y, pos.y));
             p /= 2;
-            GameObject m = Instantiate(Particle, p, Quaternion.identity);
+
+            GameObject particleObject = Instantiate(Particle, p, Quaternion.identity,ParentForParticles.transform);
 
 
-            AddMass(m);
+            AddMass(particleObject);
 
             for (int i = 0; i < Players.Count; i++)
             {
                 ParticlesEater pp = Players[i].GetComponent<ParticlesEater>();
-                pp.AddMass(m);
+                pp.AddMass(particleObject);
 
             }
         }
