@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Particle
   - ParticlesParent
+  - ShootingStartPoint
   layers:
   - Default
   - TransparentFX
