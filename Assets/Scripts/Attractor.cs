@@ -1,7 +1,4 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using interfaces;
 using models;
 using UnityEngine;
@@ -9,38 +6,26 @@ using UnityEngine;
 public class Attractor : MonoBehaviour, IAttractor
 {
     public LayerMask AttractionLayer;    
-    public CircleCollider2D _orbitCollider;
-    public CircleCollider2D _innerCollider;
-    public Rigidbody2D _rigidbody2D;
+    public CircleCollider2D OrbitCollider;
+    public CircleCollider2D InnerCollider;
 
-    public float DBG_RotationSpeedScale = 0.01f;
-    public float DBG_RotationSpeedLimit = 3.5f;
-    public float DBG_PushOutForceLimit = 2f;
-    public float DBG_OrbitDistanceDiff = 0f;
-
+    [Tooltip("Satellites orbit speed.\nHigher speed leads to a wider orbit.\nForms actual satellites orbit along with OrbitRadius (magenta).")] 
+    public float SpeedScale = 1600;
+    [Tooltip("Shift ot the OrbitRadius(magenta) from the middle between colliders")] 
+    public float OrbitDistanceShift = -3f;
     [SerializeField]
     private float effectionRadius = 10;
 
+    // middle radius between _innerCollider and _orbitCollider plus DBG_OrbitDistanceDiff
+    public float OrbitRadius => ((OrbitCollider.radius + InnerCollider.radius) * transform.localScale.x) / 2f + OrbitDistanceShift;
 
-
-    private const float MAX_VELOCITY_MAGNITUDE = 1.3f;
-    private const float MIN_VELOCITY_MAGNITUDE = 0f;
-
-    // middle radius between _innerCollider and _orbitCollider plus DBG_OrbitDistanceDiff 
-    public float OrbitDistance => ((_orbitCollider.radius + _innerCollider.radius) * transform.localScale.x) / 2f + DBG_OrbitDistanceDiff;
-                                  // * (1 - (_rigidbody2D.velocity.magnitude / MAX_VELOCITY_MAGNITUDE) / 1.5f); // think about this part, most likely remove
-    
     public IEnumerable<ISatellite> Satellites { get; set; }
-
-
 
     void Start()
     {
         SetAttractedObjects();
         
-        // var colliders = GetComponents<CircleCollider2D>();
-        // _orbitCollider = colliders[0].radius > colliders[1].radius ? colliders[0] : colliders[1]; // yeah, very bad
-        Debug.Log("orbit radius - " + OrbitDistance);
+        Debug.Log("Orbit radius - " + OrbitRadius);
     }
 
     void Update()
@@ -61,13 +46,12 @@ public class Attractor : MonoBehaviour, IAttractor
         Gizmos.DrawWireSphere(transform.position, effectionRadius);
         
         Gizmos.color = Color.magenta;
-        Gizmos.DrawWireSphere(transform.position, OrbitDistance);
+        Gizmos.DrawWireSphere(transform.position, OrbitRadius);
     }
     
     void SetAttractedObjects()
     {
         var satellites = Physics2D.OverlapCircleAll(transform.position, effectionRadius, AttractionLayer);
-            // .Select(x => x.GetComponent<Satellite>());// can be optimized
 
         foreach (var satellite in satellites)
         {

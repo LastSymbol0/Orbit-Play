@@ -1,4 +1,3 @@
-using System;
 using interfaces;
 using UnityEngine;
 
@@ -7,14 +6,12 @@ static class Constants
     public static readonly float G = 9.81f;
 }
 
-
 public class Satellite : MonoBehaviour, ISatellite
 {
-    
     public IAttractor CurrentAttractor { get => currentAttractor; set => currentAttractor = (Attractor)value; }//shit
     public Attractor currentAttractor;
 
-    public bool IsOnOrbit = false;
+    public bool IsOnOrbit;
     
     private Transform _currentAttractorTransform;
     private Rigidbody2D _currentAttractorRigidbody2D;
@@ -42,9 +39,7 @@ public class Satellite : MonoBehaviour, ISatellite
         
         _currentAttractorTransform = attractorGameObject.GetComponent<Transform>();
         _currentAttractorRigidbody2D = attractorGameObject.GetComponent<Rigidbody2D>();
-
-        // SetInitialVelocity();
-    }
+    }   
 
     public void Detach()
     {
@@ -54,33 +49,6 @@ public class Satellite : MonoBehaviour, ISatellite
         _currentAttractorRigidbody2D = null;
     }
 
-    public void UpdateOrbitalMovement_old()
-    {
-        // Vector3 attractorPosition = _currentAttractorTransform.position;
-        // Vector3 satellitePosition = transform.position;
-        // float attractorMass = _currentAttractorRigidbody2D.mass;
-        // float satelliteMass = _rigidbody2D.mass;
-        //
-        // bool addExtraRotation = _rigidbody2D.velocity.magnitude < 3f;
-        //
-        // if (addExtraRotation)
-        // {
-        //     Debug.Log("Rotating");
-        // }
-        //
-        // float r = Vector3.Distance(attractorPosition, satellitePosition);
-        // float totalForce = -(Constants.G * attractorMass * satelliteMass) / (r * r);
-        // Vector2 direction = (satellitePosition - attractorPosition);
-        // Vector2 additionalRotationForce = addExtraRotation ? transform.up : Vector2.zero;
-        // Vector2 force = (direction + additionalRotationForce).normalized * totalForce;
-        //
-        // // move
-        // _rigidbody2D.AddForce(force);
-        //
-        // //rotate to "look" on the attractor
-        // transform.right = attractorPosition - satellitePosition;
-    }
-
     public void UpdateOrbitalMovement()
     {
         Vector3 attractorPosition = _currentAttractorTransform.position;
@@ -88,76 +56,48 @@ public class Satellite : MonoBehaviour, ISatellite
         float attractorMass = _currentAttractorRigidbody2D.mass;
         float satelliteMass = _rigidbody2D.mass;
         
-        
-        float DBG_RotationSpeedScale = currentAttractor.DBG_RotationSpeedScale;
-        float DBG_RotationSpeedLimit = currentAttractor.DBG_RotationSpeedLimit;
-        float DBG_OrbitDistance = currentAttractor.OrbitDistance;
-
+        float speedScale = currentAttractor.SpeedScale;
+        float orbitRadius = currentAttractor.OrbitRadius;
 
         Vector2 finalForce = Vector2.zero;
         
         if (!IsOnOrbit) // just a common gravitation
         {
-            bool addExtraRotation = _rigidbody2D.velocity.magnitude < 3f;
-
-            if (addExtraRotation)
-            {
-                // Debug.Log("Rotating");
-            }
-            
             float r = Vector3.Distance(attractorPosition, satellitePosition);
+
+            // 1. Do we need such a fair calculations of the force? Because we should scale it after that in any way
+            // 2. TODO: Add delta time to the calculations
             float totalForce = -(Constants.G * attractorMass * satelliteMass) / (r * r);
             Vector2 direction = (satellitePosition - attractorPosition);
-            Vector2 additionalRotationForce = addExtraRotation ? transform.up : Vector2.zero;
-            finalForce = (direction + additionalRotationForce).normalized * totalForce;
+            
+            finalForce = direction.normalized * totalForce;
         }
-        else  // trying to move by orbit
+        else  // orbit movement
         {
-            var distance = (satellitePosition - attractorPosition).magnitude;
+            // value to calculate the proportion between 'rotation' and 'attraction' force.
+            // - 0f to 1f   - when satellite closer to the attractor than $orbitRadius,
+            // - 1f         - when satellite exact on orbit,
+            // - 1f to inf  - when satellite is farther than $orbitRadius.
+            float stabilizer = Vector3.Distance(attractorPosition, satellitePosition) / orbitRadius;
 
-            var regulateDistanceToAttractorForce = distance - DBG_OrbitDistance;
-
-
-            // if (distance <= DBG_OrbitDistance)
-            // {
-            //     _rigidbody2D.velocity = Vector2.zero;
-            // }
-            if (_rigidbody2D.velocity.magnitude < DBG_RotationSpeedLimit)
-            {
-                float r = Vector3.Distance(attractorPosition, satellitePosition);
-                float totalForce = (-(Constants.G * attractorMass * satelliteMass) / (r * r));
+            Vector2 directionClockwise = transform.up * (1f / Mathf.Sqrt(stabilizer));
+            Vector2 directionToAttractor =transform.right;
                 
-                // totalForce *= Mathf.Abs(regulateDistanceToAttractorForce);
-                //
-                //
-                // if (Mathf.Abs(totalForce) > currentAttractor.DBG_PushOutForceLimit)
-                // {
-                //     totalForce = totalForce > 0 ?
-                //         currentAttractor.DBG_PushOutForceLimit
-                //         : -currentAttractor.DBG_PushOutForceLimit;
-                // }
-                
-                Vector2 directionClockwise = transform.up * DBG_RotationSpeedScale;
-                Vector2 directionToAttractor = -transform.right * regulateDistanceToAttractorForce;
-                finalForce = (directionToAttractor + directionClockwise).normalized * totalForce;
-            }
+
+            finalForce = (directionToAttractor + directionClockwise) * (speedScale * Time.deltaTime);
+            
+            // // Debug diff between actual and desired orbits. Could affect fps
+            // Debug.Log(stabilizer);
+            //
+            // // Debug existing and additional forces as vectors. Could affect fps
+            // DebugExtensions.DrawArrow(transform.position, finalForce, Color.magenta);
+            // DebugExtensions.DrawArrow(transform.position, _rigidbody2D.velocity, Color.red);
         }
         
-                
-        //rotate to "look" on the attractor
+        // rotate to "look" on the attractor
         transform.right = attractorPosition - satellitePosition;
 
         // move
         _rigidbody2D.AddForce(finalForce);
-    }
-
-    private void SetInitialVelocity()
-    {
-        Vector3 satellitePosition = transform.position;
-        float attractorMass = _currentAttractorRigidbody2D.mass;
-        
-        float initV = (2f * Constants.G * attractorMass / satellitePosition.magnitude);
-        float escapeV = Mathf.Sqrt(4f * Constants.G * attractorMass / satellitePosition.magnitude);
-        _rigidbody2D.velocity += new Vector2(0, initV);
     }
 }
