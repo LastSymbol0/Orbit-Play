@@ -829,7 +829,7 @@ MonoBehaviour:
   - {fileID: 1632057655}
   CreatedParticles: []
   MaxParticles: 15
-  TIME_TO_CREATE_PARTICLE: 0.02
+  TIME_TO_CREATE_PARTICLE: 0.2
   pos: {x: 80, y: 40}
 --- !u!4 &1196234473
 Transform:
@@ -839,7 +839,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1196234471}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 75.61137, y: 0.7498635, z: 0}
+  m_LocalPosition: {x: 75.61137, y: 0.7498635, z: 10.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1903,6 +1903,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 650659367}
     m_Modifications:
+    - target: {fileID: 4979599396090096661, guid: 0d201d5307c9a93458324298edc450f1, type: 3}
+      propertyPath: SpeedScaleMax
+      value: 0.2
+      objectReference: {fileID: 0}
     - target: {fileID: 5152873795853410120, guid: 0d201d5307c9a93458324298edc450f1, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -2019,9 +2023,17 @@ PrefabInstance:
       propertyPath: SpeedScale
       value: 10000
       objectReference: {fileID: 0}
+    - target: {fileID: 5152873795853410123, guid: 0d201d5307c9a93458324298edc450f1, type: 3}
+      propertyPath: CameraLerpedSpeedScale
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 5152873795853410124, guid: 0d201d5307c9a93458324298edc450f1, type: 3}
       propertyPath: m_Name
       value: Attractor
+      objectReference: {fileID: 0}
+    - target: {fileID: 5152873795853410124, guid: 0d201d5307c9a93458324298edc450f1, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 5152873795853410125, guid: 0d201d5307c9a93458324298edc450f1, type: 3}
       propertyPath: m_IsTrigger
