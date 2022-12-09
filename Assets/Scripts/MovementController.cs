@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MovementController : MonoBehaviour
@@ -21,6 +19,7 @@ public class MovementController : MonoBehaviour
     {
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
+        
         Vector2 addForce = new Vector2(0f, 0f);
         
         if (horizontal > 0.01f || horizontal < -0.01f)
@@ -32,9 +31,10 @@ public class MovementController : MonoBehaviour
         {
             addForce.y = vertical * SpeedScale;
         }
+
+        addForce *= Time.deltaTime;
         
         _rigidbody2D.AddForce(addForce, ForceMode2D.Force);
-        
         
         _cameraTransform.position = new Vector3(transform.position.x, transform.position.y, _cameraTransform.position.z);
     }
