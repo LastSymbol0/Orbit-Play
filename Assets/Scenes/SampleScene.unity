@@ -706,7 +706,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6939396904949209103, guid: a718cb3ce11bb8148bae93074b4e078f, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6939396904949209137, guid: a718cb3ce11bb8148bae93074b4e078f, type: 3}
       propertyPath: m_LinearDrag
@@ -811,7 +811,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1196234472
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -828,8 +828,8 @@ MonoBehaviour:
   Players:
   - {fileID: 1632057655}
   CreatedParticles: []
-  MaxParticles: 40
-  TIME_TO_CREATE_PARTICLE: 0.2
+  MaxParticles: 15
+  TIME_TO_CREATE_PARTICLE: 0.02
   pos: {x: 80, y: 40}
 --- !u!4 &1196234473
 Transform:
@@ -839,7 +839,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1196234471}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 75.61137, y: 0.7498635, z: 0.35042536}
+  m_LocalPosition: {x: 75.61137, y: 0.7498635, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1289,7 +1289,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bb39067a4c80f44a97007cf9bb678d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ScalingCoef: 1.05
   Particles: []
 --- !u!4 &1632057671 stripped
 Transform:
@@ -1324,7 +1323,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6939396904949209103, guid: a718cb3ce11bb8148bae93074b4e078f, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6939396904949209137, guid: a718cb3ce11bb8148bae93074b4e078f, type: 3}
       propertyPath: m_LinearDrag
@@ -1498,7 +1497,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6939396904949209103, guid: a718cb3ce11bb8148bae93074b4e078f, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6939396904949209137, guid: a718cb3ce11bb8148bae93074b4e078f, type: 3}
       propertyPath: m_LinearDrag
@@ -1563,7 +1562,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6939396904949209103, guid: a718cb3ce11bb8148bae93074b4e078f, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6939396904949209137, guid: a718cb3ce11bb8148bae93074b4e078f, type: 3}
       propertyPath: m_LinearDrag
@@ -2056,6 +2055,10 @@ PrefabInstance:
     - target: {fileID: 6939396904949209103, guid: a718cb3ce11bb8148bae93074b4e078f, type: 3}
       propertyPath: m_Name
       value: Satellite
+      objectReference: {fileID: 0}
+    - target: {fileID: 6939396904949209103, guid: a718cb3ce11bb8148bae93074b4e078f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6939396904949209139, guid: a718cb3ce11bb8148bae93074b4e078f, type: 3}
       propertyPath: m_RootOrder
