@@ -1310,6 +1310,19 @@ Rigidbody2D:
   m_CorrespondingSourceObject: {fileID: 5152873795853410126, guid: 0d201d5307c9a93458324298edc450f1, type: 3}
   m_PrefabInstance: {fileID: 5152873796375842812}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1632057682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1632057655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b12bb18564d91d4683867d4597a51d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShootingSpeed: 2
 --- !u!1001 &1687061193
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1961,7 +1974,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5152873795853410121, guid: 0d201d5307c9a93458324298edc450f1, type: 3}
       propertyPath: SpeedScale
-      value: 1600
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 5152873795853410121, guid: 0d201d5307c9a93458324298edc450f1, type: 3}
       propertyPath: _rigidbody2D
@@ -1990,6 +2003,10 @@ PrefabInstance:
     - target: {fileID: 5152873795853410121, guid: 0d201d5307c9a93458324298edc450f1, type: 3}
       propertyPath: effectionRadius
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5152873795853410121, guid: 0d201d5307c9a93458324298edc450f1, type: 3}
+      propertyPath: OrbitDistanceShift
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5152873795853410121, guid: 0d201d5307c9a93458324298edc450f1, type: 3}
       propertyPath: DBG_OrbitDistanceDiff
@@ -2034,6 +2051,10 @@ PrefabInstance:
     - target: {fileID: 5152873795853410124, guid: 0d201d5307c9a93458324298edc450f1, type: 3}
       propertyPath: m_Layer
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5152873795853410124, guid: 0d201d5307c9a93458324298edc450f1, type: 3}
+      propertyPath: m_TagString
+      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 5152873795853410125, guid: 0d201d5307c9a93458324298edc450f1, type: 3}
       propertyPath: m_IsTrigger
