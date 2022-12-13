@@ -7,9 +7,12 @@ using UnityEngine.Serialization;
 public class ParticlesEater : MonoBehaviour
 {
     [FormerlySerializedAs("Mass")] public GameObject[] Particles;
+    private PlayerActions _playerActions;
 
     void Start()
     {
+        _playerActions = GetComponent<PlayerActions>();
+        
         ParticlesSpawner.Instance.Players.Add(gameObject);
         UpdateMass();
         InvokeRepeating("CheckMass", 0, 0.1f);
@@ -41,11 +44,14 @@ public class ParticlesEater : MonoBehaviour
 
     public void CheckMass()
     {
+        if (!_playerActions.OpenToConsume) return;
+        
+        Debug.Log("CheckMass");
         foreach (var t in Particles)
         {
             Transform m = t.transform;
             // can be optimized
-            if (Vector2.Distance(transform.position, m.position) <= transform.localScale.x / 3)
+            if (Vector2.Distance(transform.position, m.position) <= transform.localScale.x / 4)
             {
                 RemoveMass(m.gameObject);
                 PlayerEat();
