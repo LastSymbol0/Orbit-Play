@@ -23,7 +23,13 @@ namespace Mirror
 
         void OnGUI()
         {
-            GUILayout.BeginArea(new Rect(10 + offsetX, 40 + offsetY, 215, 9999));
+            if (Application.isMobilePlatform)
+            {
+                GUI.skin.button.fontSize = 64;
+                GUI.skin.textField.fontSize = 64;
+            }
+
+            GUILayout.BeginArea(new Rect(10 + offsetX, 40 + offsetY, 1000, 9999));
             if (!NetworkClient.isConnected && !NetworkServer.active)
             {
                 StartButtons();

@@ -42,6 +42,7 @@ public class ParticlesEater : MonoBehaviour
         ParticlesSpawner.Instance.RemoveMass(particleObject);
     }
 
+    // TODO: fix this shit, it doesn't work
     public void CheckMass()
     {
         if (!_playerActions.OpenToConsume) return;

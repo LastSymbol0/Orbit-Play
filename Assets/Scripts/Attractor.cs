@@ -30,7 +30,8 @@ public class Attractor : MonoBehaviour, IAttractor
 
     void Update()
     {
-        SetAttractedObjects();
+        // TODO: uncomment and rewrite, when it will be the time
+        // SetAttractedObjects();
     }
 
     public Ellipse GetOrbit()
@@ -42,8 +43,8 @@ public class Attractor : MonoBehaviour, IAttractor
     
     void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, effectionRadius);
+        // Gizmos.color = Color.yellow;
+        // Gizmos.DrawWireSphere(transform.position, effectionRadius);
         
         Gizmos.color = Color.magenta;
         Gizmos.DrawWireSphere(transform.position, OrbitRadius);
@@ -52,22 +53,27 @@ public class Attractor : MonoBehaviour, IAttractor
     void SetAttractedObjects()
     {
         var satellites = Physics2D.OverlapCircleAll(transform.position, effectionRadius, AttractionLayer);
-
+        
         foreach (var satellite in satellites)
         {
-            Debug.Log($"Attaching satellite: {satellite}");
-            satellite.GetComponent<Satellite>().Attach(this);
-            satellite.gameObject.layer = LayerMask.NameToLayer("Default");
+            AttachSatellite(satellite.GetComponent<Satellite>());
         }
+    }
+
+    private void AttachSatellite(Satellite satellite)
+    {
+        Debug.Log($"Attaching satellite: {satellite}");
+        satellite.Attach(this);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         Satellite satellite = other.GetComponent<Satellite>();
 
-        if (satellite)
+        if (satellite && satellite.currentAttractor == null)
         {
             Debug.Log("Entered orbit");
+            AttachSatellite(satellite);
             satellite.IsOnOrbit = true;
         }
     }
@@ -76,10 +82,11 @@ public class Attractor : MonoBehaviour, IAttractor
     {
         Satellite satellite = other.GetComponent<Satellite>();
 
-        if (satellite)
+        if (satellite && satellite.currentAttractor == this)
         {
             Debug.Log("Exited orbit");
             satellite.IsOnOrbit = false;
+            satellite.Detach();
         }
     }
 }

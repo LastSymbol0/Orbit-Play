@@ -17,10 +17,12 @@ public class Satellite : MonoBehaviour, ISatellite
     private Rigidbody2D _currentAttractorRigidbody2D;
 
     private Rigidbody2D _rigidbody2D;
+    private LayerMask _initialLayer;
     
     void Start()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
+        _initialLayer = gameObject.layer;
     }
 
     void Update()
@@ -39,6 +41,8 @@ public class Satellite : MonoBehaviour, ISatellite
         
         _currentAttractorTransform = attractorGameObject.GetComponent<Transform>();
         _currentAttractorRigidbody2D = attractorGameObject.GetComponent<Rigidbody2D>();
+        
+        gameObject.layer = LayerMask.NameToLayer("Default");
     }   
 
     public void Detach()
@@ -47,6 +51,10 @@ public class Satellite : MonoBehaviour, ISatellite
 
         _currentAttractorTransform = null;
         _currentAttractorRigidbody2D = null;
+        
+        IsOnOrbit = false;
+
+        gameObject.layer = _initialLayer;
     }
 
     public void UpdateOrbitalMovement()
