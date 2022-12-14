@@ -8,6 +8,7 @@ static class Constants
 
 public class Satellite : MonoBehaviour, ISatellite
 {
+    public GameObject GameObject { get => gameObject; }
     public IAttractor CurrentAttractor { get => currentAttractor; set => currentAttractor = (Attractor)value; }//shit
     public Attractor currentAttractor;
 

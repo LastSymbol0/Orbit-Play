@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using interfaces;
 using models;
 using UnityEngine;
@@ -19,7 +20,7 @@ public class Attractor : MonoBehaviour, IAttractor
     // middle radius between _innerCollider and _orbitCollider plus DBG_OrbitDistanceDiff
     public float OrbitRadius => ((OrbitCollider.radius + InnerCollider.radius) * transform.localScale.x) / 2f + OrbitDistanceShift;
 
-    public IEnumerable<ISatellite> Satellites { get; set; }
+    public IList<ISatellite> Satellites { get; } = new List<ISatellite>();
 
     void Start()
     {
@@ -63,6 +64,7 @@ public class Attractor : MonoBehaviour, IAttractor
     private void AttachSatellite(Satellite satellite)
     {
         Debug.Log($"Attaching satellite: {satellite}");
+        Satellites.Add(satellite);
         satellite.Attach(this);
     }
 
@@ -87,6 +89,7 @@ public class Attractor : MonoBehaviour, IAttractor
             Debug.Log("Exited orbit");
             satellite.IsOnOrbit = false;
             satellite.Detach();
+            Satellites.Remove(satellite);
         }
     }
 }

@@ -1,11 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ShootingController : MonoBehaviour
 {
     public float ShootingSpeed = 1f;
     private GameObject Shell;
+
+    private Attractor _attractor;
+
+    private GameObject _joystick;
+
+    private void Start()
+    {
+        _attractor = GetComponent<Attractor>();
+        _joystick = GameObject.FindGameObjectWithTag("Joystick");
+    }
 
     // Update is called once per frame
     void Update()
@@ -21,17 +30,19 @@ public class ShootingController : MonoBehaviour
         {
             if (Shell == null)
             {
-                GameObject findedObject = MousePositionRayToObject();
-
+                GameObject findedObject = MousePositionToNearestSatellite();
+                
                 if (findedObject != null)
                 {
-                    if (findedObject.tag != "Player")
+                    // if (findedObject.tag != "Player")
                     {
-
+                        Debug.Log("dew - 1");
                         Satellite script = findedObject.GetComponent<Satellite>();
 
                         if(script != null && script.IsOnOrbit)
                         {
+                            Debug.Log("dew - 2");
+
                             Shell = findedObject;
 
                             SpriteRenderer renderer = findedObject.GetComponent<SpriteRenderer>();
@@ -109,7 +120,7 @@ public class ShootingController : MonoBehaviour
     /// <returns></returns>
     private GameObject MousePositionRayToObject()
     {
-        int layerObject = 8;
+        int layerObject = 0;
         Vector2 ray = new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y);
         RaycastHit2D hit = Physics2D.Raycast(ray, ray, layerObject);
 
@@ -125,5 +136,22 @@ public class ShootingController : MonoBehaviour
         }
 
         return null;
+    }
+
+    private GameObject MousePositionToNearestSatellite()
+    {
+        Vector3 mouseWorldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+        var nearestSatellite = _attractor.Satellites
+            .Select(x => new
+            {
+                satellite = x,
+                dist = Vector3.Distance(x.GameObject.transform.position, mouseWorldPoint)
+            })
+            .OrderBy(x => x.dist)
+            .First();
+
+
+        return nearestSatellite.satellite.GameObject;
     }
 }

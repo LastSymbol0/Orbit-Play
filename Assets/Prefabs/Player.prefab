@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 8734155812849160516}
   - component: {fileID: 6196448442281635449}
   - component: {fileID: 6522504662993188868}
+  - component: {fileID: 2326461308440432292}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -228,7 +229,6 @@ MonoBehaviour:
   syncInterval: 0.1
   SpeedScale: 50000
   CameraLerpedSpeedScale: 3
-  PlayerObject: {fileID: 1614317523940458564}
 --- !u!114 &6196448442281635449
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -247,7 +247,6 @@ MonoBehaviour:
   SpeedScaleMax: 0.2
   ParticlesConsumingTime: 1
   FinalColor: {r: 1, g: 0, b: 0, a: 1}
-  PlayerObject: {fileID: 1614317523940458564}
 --- !u!114 &6522504662993188868
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -261,3 +260,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Particles: []
+--- !u!114 &2326461308440432292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1614317523940458564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b12bb18564d91d4683867d4597a51d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShootingSpeed: 2

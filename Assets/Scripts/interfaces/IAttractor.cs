@@ -6,7 +6,7 @@ namespace interfaces
 {
     public interface IAttractor
     {
-        IEnumerable<ISatellite> Satellites { get; set; }
+        IList<ISatellite> Satellites { get; }
 
         public Ellipse GetOrbit();
         
