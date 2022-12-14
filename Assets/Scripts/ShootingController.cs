@@ -27,7 +27,19 @@ public class ShootingController : MonoBehaviour
                 {
                     if (findedObject.tag != "Player")
                     {
-                        Shell = findedObject;
+
+                        Satellite script = findedObject.GetComponent<Satellite>();
+
+                        if(script != null && script.IsOnOrbit)
+                        {
+                            Shell = findedObject;
+
+                            SpriteRenderer renderer = findedObject.GetComponent<SpriteRenderer>();
+                            if (renderer != null)
+                            {
+                                renderer.material.SetInt("_Animated", 1);
+                            }
+                        }
                     }
                 }
             }
@@ -39,8 +51,17 @@ public class ShootingController : MonoBehaviour
         {
             if (Shell != null)
             {
+
                 LookAtMousePosition(Shell);
+
+                SpriteRenderer renderer = Shell.GetComponent<SpriteRenderer>();
+                if (renderer != null)
+                {
+                    renderer.material.SetInt("_Animated", 0);
+                }
+
                 ShootMetheorite(Shell);
+
                 Shell = null;
             }
         }

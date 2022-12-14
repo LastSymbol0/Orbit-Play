@@ -142,6 +142,10 @@ MonoBehaviour:
   AttractionLayer:
     serializedVersion: 2
     m_Bits: 128
+  OrbitCollider: {fileID: 0}
+  InnerCollider: {fileID: 0}
+  SpeedScale: 1600
+  OrbitDistanceShift: -3
   effectionRadius: 9
 --- !u!58 &5152873795853410122
 CircleCollider2D:
@@ -172,6 +176,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SpeedScale: 50
+  CameraLerpedSpeedScale: 3
   Camera: {fileID: 0}
 --- !u!114 &4979599396090096661
 MonoBehaviour:
@@ -185,3 +190,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b3a0d1029a02e744914d056ffe58440, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SpeedScaleMax: 0.2
+  ParticlesConsumingTime: 1
+  FinalColor: {r: 1, g: 0, b: 0, a: 1}
