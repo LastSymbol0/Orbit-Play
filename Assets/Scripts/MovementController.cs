@@ -1,23 +1,38 @@
+using Mirror;
 using UnityEngine;
 
-public class MovementController : MonoBehaviour
+public class MovementController : NetworkBehaviour
 {
     public float SpeedScale = 10f;
     public float CameraLerpedSpeedScale = 3f;
 
-    public Camera Camera;
-    
+    private Camera _camera;
+    private Joystick _joystick;
     private Rigidbody2D _rigidbody2D;
     private Transform _cameraTransform;
     
     void Start()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
-        _cameraTransform = Camera.GetComponent<Transform>();
+
+        _joystick = GameObject.FindGameObjectWithTag("Joystick")?.GetComponent<FloatingJoystick>();
     }
-    
+
+    public override void OnStartLocalPlayer()
+    {
+        base.OnStartLocalPlayer();
+
+        var cam = GameObject.FindGameObjectWithTag("MainCamera");
+
+        _camera = cam.GetComponent<Camera>();
+        _cameraTransform = _camera.GetComponent<Transform>();
+    }
+
     void Update()
     {
+        if (!isLocalPlayer)
+            return;
+        
         MoveTarget();
         MoveCamera();
     }
@@ -27,19 +42,24 @@ public class MovementController : MonoBehaviour
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
 
-        Vector2 addForce = new Vector2(0f, 0f);
+        Vector2 addForce = Vector2.zero;
 
         if (horizontal > 0.01f || horizontal < -0.01f)
         {
-            addForce.x = horizontal * SpeedScale;
+            addForce.x = horizontal;
         }
 
         if (vertical > 0.01f || vertical < -0.01f)
         {
-            addForce.y = vertical * SpeedScale;
+            addForce.y = vertical;
         }
 
-        addForce *= Time.deltaTime;
+        if (_joystick)
+        {
+            addForce += _joystick.Direction;
+        }
+
+        addForce *= SpeedScale * Time.deltaTime;
 
         _rigidbody2D.AddForce(addForce, ForceMode2D.Force);
     }

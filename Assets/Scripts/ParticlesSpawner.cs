@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using Mirror;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
-public class ParticlesSpawner : MonoBehaviour
+public class ParticlesSpawner : NetworkBehaviour
 {
 
     #region  Instance
@@ -16,7 +18,7 @@ public class ParticlesSpawner : MonoBehaviour
     #endregion  
 
     [FormerlySerializedAs("Mass")] public GameObject Particle;
-    public List<GameObject> Players = new List<GameObject>();
+    public List<GameObject> Players;
 
     [FormerlySerializedAs("CreatedMasses")] 
     public List<GameObject> CreatedParticles = new List<GameObject>();
@@ -32,15 +34,22 @@ public class ParticlesSpawner : MonoBehaviour
     private GameObject ParentForParticles = null;
 
 
+    public override void OnStartServer()
+    {
+        base.OnStartServer();
+
+        StartCoroutine(CreateMass());
+    }
+
     void Start()
     {
+        Players = new List<GameObject>();
+        
         ParentForParticles = GameObject.FindGameObjectWithTag("ParticlesParent");
         if(ParentForParticles == null)
         {
             Debug.LogError("Particles parent is null. Can't find GameObject with tag - ParticlesParent");
         }
-
-        StartCoroutine(CreateMass());
     }
 
     public IEnumerator CreateMass()
@@ -52,8 +61,8 @@ public class ParticlesSpawner : MonoBehaviour
             Vector2 p = new Vector2(Random.Range(-pos.x, pos.x), Random.Range(-pos.y, pos.y));
             p /= 2;
 
-            GameObject particleObject = Instantiate(Particle, p, Quaternion.identity,ParentForParticles.transform);
-
+            GameObject particleObject = Instantiate(Particle, p, Quaternion.identity); // parent was removed to sync spawn over network correctly
+            NetworkServer.Spawn(particleObject);
 
             AddMass(particleObject);
 
@@ -67,7 +76,7 @@ public class ParticlesSpawner : MonoBehaviour
 
         StartCoroutine(CreateMass());
     }
-
+    
     public void AddMass(GameObject m)
     {
         if (CreatedParticles.Contains(m) == false)

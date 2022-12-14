@@ -1,10 +1,11 @@
 using System.Linq;
+using Mirror;
 using UnityEngine;
 
 /// <summary>
 /// Correspond for Player-specific actions: particles consuming, TODO: movement, TODO:shooting
 /// </summary>
-public class PlayerActions : MonoBehaviour
+public class PlayerActions : NetworkBehaviour
 {
     public float SpeedScaleMax = 0.2f;
     public float ParticlesConsumingTime = 1f;
@@ -47,8 +48,10 @@ public class PlayerActions : MonoBehaviour
 
     void Update()
     {
-        // Debug.Log($"ParticlesConsumingProgress: {ParticlesConsumingProgress}");
+        if (!isLocalPlayer)
+            return;
 
+        // TODO: add mobile control
         if (Input.GetKey(KeyCode.Space))
         {
             if (ParticlesConsumingTimeProgress < ParticlesConsumingTime)
@@ -68,6 +71,8 @@ public class PlayerActions : MonoBehaviour
 
     private void PlayAnimation()
     {
+        // TODO: add networking sync
+        
         _attractor.SpeedScale = Mathf.Lerp(_startSpeed, _finalSpeed, ParticlesConsumingProgress);
         _attractor.OrbitDistanceShift = Mathf.Lerp(_startOrbitShift, _finalOrbitShift, ParticlesConsumingProgress);
 
