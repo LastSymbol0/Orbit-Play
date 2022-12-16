@@ -1,7 +1,8 @@
 using System.Linq;
+using Mirror;
 using UnityEngine;
 
-public class ShootingController : MonoBehaviour
+public class ShootingController : NetworkBehaviour
 {
     public float ShootingSpeed = 1f;
     private GameObject Shell;
@@ -19,8 +20,9 @@ public class ShootingController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!isLocalPlayer) return;
+        
         ExecuteUserInput();
-
     }
 
     private void ExecuteUserInput()
@@ -71,7 +73,7 @@ public class ShootingController : MonoBehaviour
                     renderer.material.SetInt("_Animated", 0);
                 }
 
-                ShootMetheorite(Shell);
+                ShootMeteorite(Shell);
 
                 Shell = null;
             }
@@ -88,18 +90,19 @@ public class ShootingController : MonoBehaviour
         //    }
         //}
     }
-
-    private void ShootMetheorite(GameObject metheorite)
+    
+    private void ShootMeteorite(GameObject meteorite)
     {
-        Vector3 screenPoint = Camera.main.WorldToScreenPoint(metheorite.transform.position);
+        Vector3 screenPoint = Camera.main.WorldToScreenPoint(meteorite.transform.position);
         Vector2 direction = (Vector2)(Input.mousePosition - screenPoint);
 
         float shootingForce = Vector2.Distance(screenPoint, Input.mousePosition) * 0.05f;
 
         direction.Normalize();
 
-        metheorite.GetComponent<Rigidbody2D>().AddForce(direction * shootingForce * ShootingSpeed, ForceMode2D.Impulse);
+        ShootMeteorite_Cmd(meteorite, direction, shootingForce);
     }
+
 
     /// <summary>
     /// Object look at the mouse position on screen.
@@ -107,10 +110,22 @@ public class ShootingController : MonoBehaviour
     private void LookAtMousePosition(GameObject lookingObject)
     {
         Vector3 direction = Input.mousePosition - Camera.main.WorldToScreenPoint(lookingObject.transform.position);
+
+        LookInDirection_Cmd(lookingObject, direction);
+    }
+
+    [Command]
+    private void ShootMeteorite_Cmd(GameObject meteorite, Vector2 direction, float shootingForce)
+    {
+        meteorite.GetComponent<Rigidbody2D>().AddForce(direction * (shootingForce * ShootingSpeed), ForceMode2D.Impulse);
+    }
+
+    [Command]
+    private void LookInDirection_Cmd(GameObject lookingObject, Vector3 direction)
+    {
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
         lookingObject.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-
     }
 
 
