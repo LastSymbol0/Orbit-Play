@@ -25,57 +25,52 @@ public class ShootingController : MonoBehaviour
 
     private void ExecuteUserInput()
     {
-        //Get Shell
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if (Input.touchCount > 0)
         {
-            if (Shell == null)
+
+            foreach (var touch in Input.touches)
             {
-                GameObject findedObject = MousePositionToNearestSatellite();
-                
-                if (findedObject != null)
+                // Did the touch action just begin?
+                if (touch.phase == TouchPhase.Began)
                 {
-                    // if (findedObject.tag != "Player")
+                    if(IsTouchInJoystickRect(touch))
                     {
-                        Debug.Log("dew - 1");
-                        Satellite script = findedObject.GetComponent<Satellite>();
+                        if (!(_joystick.activeSelf && Input.touches.Length > 1))
+                            continue;
+                    }
 
-                        if(script != null && script.IsOnOrbit)
+                    SelectAsteroid();
+
+                }
+
+                //Shooting
+                if (touch.phase == TouchPhase.Ended)
+                {
+                    if (Shell != null)
+                    {
+
+                        LookAtMousePosition(Shell);
+
+                        SpriteRenderer renderer = Shell.GetComponent<SpriteRenderer>();
+                        if (renderer != null)
                         {
-                            Debug.Log("dew - 2");
-
-                            Shell = findedObject;
-
-                            SpriteRenderer renderer = findedObject.GetComponent<SpriteRenderer>();
-                            if (renderer != null)
-                            {
-                                renderer.material.SetInt("_Animated", 1);
-                            }
+                            renderer.material.SetInt("_Animated", 0);
                         }
+
+                        ShootMetheorite(Shell);
+
+                        Shell = null;
                     }
                 }
+
             }
+
+            //Get Shell
+          
 
         }
 
-        //Shooting
-        else if (Input.GetKeyUp(KeyCode.Mouse0))
-        {
-            if (Shell != null)
-            {
-
-                LookAtMousePosition(Shell);
-
-                SpriteRenderer renderer = Shell.GetComponent<SpriteRenderer>();
-                if (renderer != null)
-                {
-                    renderer.material.SetInt("_Animated", 0);
-                }
-
-                ShootMetheorite(Shell);
-
-                Shell = null;
-            }
-        }
+            
 
         //Remove it now, rotation change gravity force
 
@@ -87,6 +82,33 @@ public class ShootingController : MonoBehaviour
         //        LookAtMousePosition(Shell);
         //    }
         //}
+    }
+
+    private void SelectAsteroid()
+    {
+        if (Shell == null)
+        {
+            GameObject findedObject = MousePositionToNearestSatellite();
+
+            if (findedObject != null)
+            {
+                // if (findedObject.tag != "Player")
+                {
+                    Satellite script = findedObject.GetComponent<Satellite>();
+
+                    if (script != null && script.IsOnOrbit)
+                    {
+                        Shell = findedObject;
+
+                        SpriteRenderer renderer = findedObject.GetComponent<SpriteRenderer>();
+                        if (renderer != null)
+                        {
+                            renderer.material.SetInt("_Animated", 1);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private void ShootMetheorite(GameObject metheorite)
@@ -153,5 +175,29 @@ public class ShootingController : MonoBehaviour
 
 
         return nearestSatellite.satellite.GameObject;
+    }
+
+    private bool IsClickInJoystickRect()
+    {
+        var imgRectTransform = _joystick.GetComponent<RectTransform>();
+
+        Vector2 localMousePosition = Input.mousePosition;//imgRectTransform.InverseTransformPoint(Input.mousePosition);
+        if (imgRectTransform.rect.Contains(localMousePosition))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private bool IsTouchInJoystickRect(Touch touch)
+    {
+        var imgRectTransform = _joystick.GetComponent<RectTransform>();
+
+        Vector2 localMousePosition = touch.position;//imgRectTransform.InverseTransformPoint(Input.mousePosition);
+        if (imgRectTransform.rect.Contains(localMousePosition))
+        {
+            return true;
+        }
+        return false;
     }
 }
