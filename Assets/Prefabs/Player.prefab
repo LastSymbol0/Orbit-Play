@@ -107,7 +107,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 99
+  m_LinearDrag: 10
   m_AngularDrag: 0
   m_GravityScale: 0
   m_Material: {fileID: 0}
@@ -166,7 +166,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 1.2
+  m_Radius: 1.3
 --- !u!114 &3208328741739492753
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -208,7 +208,7 @@ MonoBehaviour:
   scaleSensitivity: 0.01
   syncPosition: 1
   syncRotation: 1
-  syncScale: 0
+  syncScale: 1
   showGizmos: 0
   showOverlay: 0
   overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
@@ -227,7 +227,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
-  SpeedScale: 50000
+  SpeedScale: 5000
   CameraLerpedSpeedScale: 3
 --- !u!114 &6196448442281635449
 MonoBehaviour:
@@ -272,4 +272,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b12bb18564d91d4683867d4597a51d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShootingSpeed: 2
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0.1
+  ShootingSpeed: 2.5
