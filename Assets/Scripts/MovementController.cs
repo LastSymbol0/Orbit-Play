@@ -17,7 +17,7 @@ public class MovementController : NetworkBehaviour
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _playerActions = GetComponent<PlayerActions>();
 
-        _joystick = GameObject.FindGameObjectWithTag("Joystick")?.GetComponent<FloatingJoystick>();
+        _joystick = GameObject.FindGameObjectWithTag("Joystick")?.GetComponent<FixedJoystick>();
     }
 
     public override void OnStartLocalPlayer()

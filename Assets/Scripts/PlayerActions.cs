@@ -17,7 +17,7 @@ public class PlayerActions : NetworkBehaviour
 
     public void SetConsumingTimeHook(float oldTime, float newTime)
     {
-        Debug.Log($"[set progress hook] server: {isServer} | me: {isLocalPlayer} | val = {ParticlesConsumingTimeProgress} => {newTime}");
+        // Debug.Log($"[set progress hook] server: {isServer} | me: {isLocalPlayer} | val = {ParticlesConsumingTimeProgress} => {newTime}");
         ParticlesConsumingTimeProgress = newTime;
 
         PlayAnimation();
@@ -35,7 +35,8 @@ public class PlayerActions : NetworkBehaviour
     private CircleCollider2D _innerCollider;
     private CircleCollider2D _outerCollider;
     private PlayerAnimationController _animator;
-
+    private Button _eatButton;
+    
     void Start()
     {
         _attractor = GetComponent<Attractor>();
@@ -47,6 +48,11 @@ public class PlayerActions : NetworkBehaviour
         
         _finalColliderRadius = 0f + 0.01f; // 0.01f - threshold 
         // _finalOrbitShift = _startOrbitShift - 4f;
+        
+        
+        _eatButton = GameObject.FindGameObjectsWithTag("Button")?
+            .SingleOrDefault(x => x.name == "A")
+            ?.GetComponent<Button>();
     }
 
     void Update()
@@ -54,8 +60,7 @@ public class PlayerActions : NetworkBehaviour
         if (!isLocalPlayer)
             return;
         
-        // TODO: add mobile control
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Space) || _eatButton.IsButtonPressed)
         {
             if (ParticlesConsumingTimeProgress < ParticlesConsumingTime)
             {
