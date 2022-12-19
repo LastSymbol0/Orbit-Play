@@ -164,9 +164,9 @@ public class ShootingController : NetworkBehaviour
                 dist = Vector3.Distance(x.GameObject.transform.position, mouseWorldPoint)
             })
             .OrderBy(x => x.dist)
-            .First();
+            .FirstOrDefault();
 
 
-        return nearestSatellite.satellite.GameObject;
+        return nearestSatellite?.satellite?.GameObject;
     }
 }
