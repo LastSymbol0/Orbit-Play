@@ -40,6 +40,18 @@ public class ParticlesSpawner : NetworkBehaviour
         StartCoroutine(CreateMass());
     }
 
+    public override void OnStopServer()
+    {
+        base.OnStopServer();
+
+        foreach (var particle in CreatedParticles)
+        {
+            Destroy(particle);
+        }
+
+        CreatedParticles = new List<GameObject>();
+    }
+
     void Start()
     {
         ParentForParticles = GameObject.FindGameObjectWithTag("ParticlesParent");
