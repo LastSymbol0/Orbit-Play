@@ -3,12 +3,19 @@ using UnityEngine;
 
 public class ShootingController : MonoBehaviour
 {
-    public float ShootingSpeed = 1f;
+    const int NullUserTouchId = -1;
+
+
+
+    public float ShootingSpeed = 2f;
+
     private GameObject Shell;
 
     private Attractor _attractor;
 
     private GameObject _joystick;
+
+    private int _uniqueUserTouchId = NullUserTouchId;
 
     private void Start()
     {
@@ -19,11 +26,10 @@ public class ShootingController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ExecuteUserInput();
-
+        ExecuteUserTouchInput();
     }
 
-    private void ExecuteUserInput()
+    private void ExecuteUserTouchInput()
     {
         if (Input.touchCount > 0)
         {
@@ -38,7 +44,8 @@ public class ShootingController : MonoBehaviour
                         if (!(_joystick.activeSelf && Input.touches.Length > 1))
                             continue;
                     }
-
+                    //Select nearest asteroid 
+                    _uniqueUserTouchId = touch.fingerId;
                     SelectAsteroid();
 
                 }
@@ -46,9 +53,8 @@ public class ShootingController : MonoBehaviour
                 //Shooting
                 if (touch.phase == TouchPhase.Ended)
                 {
-                    if (Shell != null)
+                    if (Shell != null && _uniqueUserTouchId == touch.fingerId)
                     {
-
                         LookAtMousePosition(Shell);
 
                         SpriteRenderer renderer = Shell.GetComponent<SpriteRenderer>();
@@ -60,14 +66,11 @@ public class ShootingController : MonoBehaviour
                         ShootMetheorite(Shell);
 
                         Shell = null;
+                        _uniqueUserTouchId = NullUserTouchId;
                     }
                 }
 
             }
-
-            //Get Shell
-          
-
         }
 
             
@@ -92,19 +95,16 @@ public class ShootingController : MonoBehaviour
 
             if (findedObject != null)
             {
-                // if (findedObject.tag != "Player")
+                Satellite script = findedObject.GetComponent<Satellite>();
+
+                if (script != null && script.IsOnOrbit)
                 {
-                    Satellite script = findedObject.GetComponent<Satellite>();
+                    Shell = findedObject;
 
-                    if (script != null && script.IsOnOrbit)
+                    SpriteRenderer renderer = findedObject.GetComponent<SpriteRenderer>();
+                    if (renderer != null)
                     {
-                        Shell = findedObject;
-
-                        SpriteRenderer renderer = findedObject.GetComponent<SpriteRenderer>();
-                        if (renderer != null)
-                        {
-                            renderer.material.SetInt("_Animated", 1);
-                        }
+                        renderer.material.SetInt("_Animated", 1);
                     }
                 }
             }
@@ -148,13 +148,7 @@ public class ShootingController : MonoBehaviour
 
         if (hit.collider != null)
         {
-            Debug.Log("Hit the object. Object name is - " + hit.transform.name);
-
             return hit.transform.gameObject;
-        }
-        else
-        {
-            Debug.LogError("Raycast hit no one. Can't get GameObject.");
         }
 
         return null;
